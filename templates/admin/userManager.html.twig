@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+   <h1 class="text-primary text-center">Gestion des utilisateurs</h1>
+
+    <table class="table my-5 table-dark">
+        <thead>
+            <tr>
+                <th>Avatar</th>
+                <th>Nom</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Recettes Publiées</th>
+                <th>Inscrit.e le</th>
+                <th>Bloquer/Débloquer</th>
+                <th>Promouvoir</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+                <tr>
+                    <td><a href="{{ path('kuhnya_showByAuthor', {username : user.username}) }}"><img src="{{ asset(user.getAvatarPath()) }}" class="col-2 user_avatar" /></a></td>
+                    <th>{{ user.username }}</th>
+                    <td>{{ user.email }}</td>
+                    <td>
+                        {% if user.getRolesArray() %}
+                            {{ user.getRolesArray()[0] }}
+                        {% endif %}
+                    </td>
+                    <td>{{ user.recipes | length }}</td>
+                    <td>{{ user.createdAt | date('d/m/Y') }}</td>
+                    <td>
+                        {% if 'ROLE_ADMIN' not in user.getRolesArray() %}
+                            <a href="{{ path('admin_users_delete', {id : user.id} ) }}">
+                            {% if user.active %}
+                                <i class="fas fa-hand-paper btn btn-danger"> Bloquer</i>
+                            {% else %}
+                                <i class="fas fa-marker btn btn-success"> Débloquer</i>
+                            {% endif %}
+                            </a>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if 'ROLE_ADMIN' not in user.getRolesArray() %}
+                            {% if not user.getRolesArray() %}
+                                <a href="{{ path('admin_users_promote', {id : user.id}) }}" class="btn btn-primary">Faire Editeur</a>
+                            {% else %}
+                                <a href="{{ path('admin_users_promote', {id : user.id}) }}" class="btn btn-secondary">Retirer les droits</a>
+                            {% endif %}
+                        {% endif %}
+                    </td>  
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="pagination justify-content-center">
+        {{ knp_pagination_render(users) }}
+    </div>
+{% endblock %}

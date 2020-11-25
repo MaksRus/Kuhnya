@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1 class="text-primary text-center">Gestion des Catégories</h1>
+    <a href="{{ path('admin_categories_create') }}" class="btn btn-primary">Ajouter une Catégorie</a>
+
+    <table class="table my-5 table-dark">
+        <thead>
+            <tr>
+                <th>Catégorie</th>
+                <th>Description</th>
+                <th>Editer</th>
+                <th>Supprimer</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for category in categories %}
+                <tr>
+                    <td>{{ category.title }}</td>
+                    <th>{{ category.description | slice(0, 80) }}</th>
+                    <td>
+                        <a href="{{ path('admin_categories_edit', {id : category.id} ) }}">
+                            <i class="fas fa-marker btn btn-success"></i>
+                        </a> 
+                    </td>
+                    <td>
+                        <a href="{{ path('admin_categories_delete', {id : category.id} ) }}" class="js-confirm">
+                            <i class="far fa-trash-alt btn btn-danger"></i>
+                        </a>
+                    </td>    
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="pagination justify-content-center">
+        {{ knp_pagination_render(categories) }}
+    </div>
+    
+{% endblock %}

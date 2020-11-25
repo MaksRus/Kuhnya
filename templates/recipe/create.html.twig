@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+
+{% macro customForm(ingredient) %}
+    <div class="row js-ingredient form-group">
+        <div class="col">
+            {{ form_widget(ingredient.quantity) }}
+        </div>
+        <div class="col">
+            {{ form_widget(ingredient.ingredient) }}
+        </div>
+    </div>
+{% endmacro customForm %}
+
+{% import _self as formMacros %}
+
+{% form_theme recipeForm 'bootstrap_4_layout.html.twig' %}
+
+{% block body %}
+	<div class="container">
+		{% if editMode %}
+			<h1 class="text-primary text-center">Modifier une Recette</h1>
+		{% else %}
+			<h1 class="text-primary text-center">Nouvelle Recette</h1>
+		{% endif %}
+		
+		{{ form_start (recipeForm) }}
+		{{ form_row (recipeForm.title)}}
+		<h2 class="text-secondary">Ingredients</h2>
+		<div class="recipeIngredients" id="ingredients-list" data-prototype="{{ formMacros.customForm(recipeForm.recipeIngredients.vars.prototype)|e('html_attr') }}">
+			{% for ingredient in recipeForm.recipeIngredients %}
+				{{ formMacros.customForm(ingredient) }}
+			{% endfor %}
+		</div>
+		<button type="button" class="btn btn-warning add_item_link" data-collection-holder-class="recipeIngredients" id="js-add">Ajouter un Ingrédient</button>
+
+
+		{{ form_row (recipeForm.description)}}
+		{{ form_row (recipeForm.guestsNb)}}
+
+		<div class="row">
+			<div class="col">
+				{{ form_row (recipeForm.level )}}
+			</div>
+			<div class="col">
+				{{ form_row (recipeForm.budget )}}
+			</div>
+			<div class="col">
+				{{ form_row (recipeForm.prepTime )}}
+			</div>
+			<div class="col">
+				{{ form_row (recipeForm.categories )}}
+			</div>
+		</div>
+		
+		{{ form_row (recipeForm.images )}}
+		
+		<button type="submit" class="btn btn-primary">Sauvegarder la Recette</button>
+		{{ form_end (recipeForm) }}
+	</div>
+
+
+
+
+{% endblock %}
+
+
+{% block javascripts %}
+	<script src="{{ asset('assets/js/addIngredients.js')}}"></script>
+{% endblock %}
+

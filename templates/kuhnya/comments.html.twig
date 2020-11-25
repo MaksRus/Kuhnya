@@ -1,0 +1,41 @@
+{% form_theme form 'bootstrap_4_layout.html.twig' %}
+
+{% block body %}
+    <h2 class="text-secondary">
+        {{ recipe.comments | length }} Commentaire{% if recipe.comments | length > 1 %}s{% endif %}
+    </h2>
+    {% if app.user %}
+        {% for msg in app.flashes("comment_success") %}
+            <span class="text-primary h4">{{ msg }}</span>
+        {% endfor %}
+        <div class="row my-4 comment">
+            <img src="{{ asset(app.user.getAvatarPath()) }}"class="col-2 user_avatar" />
+            <header class="col-3 strong">{{ app.user.username }}</header>
+            <article class="col-md">
+                {{ form_start(form) }}
+                    {{ form_row(form.content)}}
+                    <button type="submit" class="btn btn-secondary">Commenter</button>
+                {{ form_end(form) }}
+            </article>
+        </div>
+    {% else %}
+        <h3>Une remarque ? Connectez-vous pour laisser un commentaire !</h3>
+        <div>
+            <a href="{{ path('security_login') }}" class="btn btn-success">Se connecter</a>
+            <a href="{{ path('security_registration') }}" class="btn btn-secondary">S'inscrire</a>
+        </div>
+    {% endif %}
+    <hr>
+    {% for comment in recipe.comments | sort((a, b)=> b.createdAt() <=> a.createdAt()) %}
+        {% if comment.validated %}
+            <div class="row my-4 comment">
+                <img src="{{ asset(comment.user.getAvatarPath()) }}"class="col-2 user_avatar" />
+                <header class="col-3 strong">
+                    {{ comment.user.username }}<br/>
+                    <small>posté le {{ comment.createdAt() | date('d/m/Y à H:i') }}</small>
+                </header>
+                <article class="col-md">{{ comment.content }}</article>
+            </div>
+        {% endif %}
+    {% endfor %}
+{% endblock %}

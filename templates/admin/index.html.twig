@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Kuhnya Admin{% endblock %}
+
+{% block body %}
+	<div class="container">
+		<h1 class="text-primary text-center">Administration</h1>
+		<ul>
+			<li>
+				<a class="btn" href="{{ path('admin_recipes') }}">Gérer les Recettes</a>
+			</li>
+            <li>
+				<a class="btn" href="{{ path('admin_ingredients') }}">Gérer les Ingrédients</a>
+			</li>
+            <li>
+				<a class="btn" href="{{ path('admin_categories') }}">Gérer les Catégories</a>
+			</li>
+			<li>
+				<a class="btn" href="{{ path('admin_comments') }}">Gérer les Commentaires</a>
+			</li>
+			<li>
+				<a class="btn" href="{{ path('admin_users') }}">Gérer les Utilisateurs</a>
+			</li>
+		</ul>
+	</div>
+
+{% endblock %}

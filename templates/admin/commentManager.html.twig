@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1 class="text-primary text-center">Gestion des Commentaires</h1>
+
+    <table class="table my-5 table-dark">
+        <thead>
+            <tr>
+                <th>Avatar</th>
+                <th>Auteur.e</th>
+                <th>Contenu</th>
+                <th>Recette</th>
+                <th>Publiée le</th>
+                <th>Valider</th>
+                <th>Supprimer</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for comment in comments %}
+                <tr>
+                    <td><a href="{{ path('kuhnya_showByAuthor', {username : comment.user.username}) }}"><img src="{{ asset(comment.user.getAvatarPath()) }}"class="col-2 user_avatar" /></a></td>
+                    <th>{{ comment.user.username }}</th>
+                    <td>{{ comment.content }}</td>
+                    <td>{{ comment.recipe.title }}</td>
+                    <td>{{ comment.createdAt | date('d/m/Y') }}</td>
+                    <td>
+                        {% if not comment.validated %}
+                            <a href="{{ path('admin_comments_edit', {id : comment.id} ) }}">
+                                <i class="fas fa-marker btn btn-success"></i>
+                            </a>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{{ path('admin_comments_delete', {id : comment.id} ) }}" class="js-confirm">
+                            <i class="far fa-trash-alt btn btn-danger"></i>
+                        </a>
+                    </td>    
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="pagination justify-content-center">
+        {{ knp_pagination_render(comments) }}
+    </div>
+    
+{% endblock %}

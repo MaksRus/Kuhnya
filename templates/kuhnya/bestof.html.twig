@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+	<section>
+		<h1 class="text-center text-primary">Les 10 Meilleures !</h1>
+			<div class="flex card-group justify-items">
+				{% for recipe in recipes %}
+					{% include 'kuhnya/card.html.twig' %}
+				{% endfor %}
+			</div>
+	</section>
+
+	{% endblock %}

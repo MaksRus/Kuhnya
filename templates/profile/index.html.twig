@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% form_theme form 'bootstrap_4_layout.html.twig' %}
+
+{% block body %}
+
+    {% if not user %}
+        <h1>Cet Utilisateur n'existe pas.</h1>
+    {% else %}
+        <h1>Profile de {{ user.username }}</h1>
+        <a href="{{ path('kuhnya_showByAuthor', {username : user.username}) }}">
+            <img src="{{ asset(user.getAvatarPath()) }}" alt="{{user.username }}" class="user_avatar col-3"/>
+        </a>
+        {% if app.user == user %}
+            {{ form_start(form) }}
+                {{ form_row(form.avatar) }}
+                <button class="btn btn-warning">Mettre à Jour</button>
+            {{ form_end(form) }}
+        {% endif %}
+    {% endif %}
+
+{% endblock %}

@@ -1,0 +1,101 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="container my-3">
+    <section class="recette my-3">
+        <header>
+            {% for category in recipe.categories %}
+			    <span class="badge badge-pill badge-primary">{{ category.title }}</span>
+		    {% endfor %}
+            <h1 class="text-primary">{{recipe.title}}</h1>
+                {% if recipe.images is empty %}
+                    <img src="{{ asset('uploads/recipesImg/notfound.jpg')}}" class="intro_img img-fluid" alt="Aucune Image">
+                {% else %}
+                    <img src="{{ asset(recipe.images[0].getPath()) }}" class="intro_img img-fluid" alt="{{ recipe.images[0].description}}">
+                {% endif %}
+        </header>
+
+        <aside class="row my-4">
+            <div class="col-md">
+               Compléxité : <span class="{{ recipe.level.name }} h4">{{recipe.level.name}}</span>
+            </div>
+            <div class="col-md">
+                Budget : <strong class="h4">{{recipe.budget.name}}</strong> <i class="fas fa-coins"></i>
+            </div>
+            <div class="col-md">
+                Temps de préparation : <strong class="h4">{{recipe.prepTime.time}} min</strong> <i class="fas fa-clock"></i>
+            </div>
+        </aside>
+
+        <aside>
+            <h2 class="text-primary">Ingredients</h2>
+            <h4>-Pour <i class="fas fa-minus-square h5 text-warning js-modifyGuest" role="button"></i> <span id="nbGuests" class="h3 text-secondary">{{ recipe.guestsNb }}</span> <i class="fas fa-plus-square h5 text-warning js-modifyGuest" role="button"></i> personnes-</h4>
+            <ul>
+                {% for recipeIngredient in recipe.recipeIngredients %}
+                    <li>
+                        <span class="quantity">{{recipeIngredient.quantity}}</span>
+                        {{recipeIngredient.ingredient.unit}} 
+                        {% if recipeIngredient.ingredient.unit is same as "" or recipeIngredient.ingredient.unit is null %}
+                            
+                        {% else %}
+                            de
+                        {% endif %} {{ recipeIngredient.ingredient.name}}
+                    </li>
+                {% endfor %}
+            </ul>
+            
+        </aside>
+
+        <article>
+            <h2 class="text-primary">Préparation</h2>
+            <div id="description">{{recipe.description | raw}}</div>
+        </article>
+        <aside class="container">
+        {% if recipe.images is empty %}
+        {% else %}
+            <div class="gallery row">
+                {% for image in recipe.images %}
+                    <img src="{{ asset(image.getPath()) }}" alt="{{ image.description}}" class="img-responsive center-block d-block mx-auto" />
+                {% endfor %}
+            </div>
+        {% endif %}
+        </aside>
+        <footer class="container flex my-3">
+            <div class="row">
+                <div class="metadata col-md-2">
+                    <a href="{{ path('kuhnya_showByAuthor', {username : recipe.user.username}) }}">
+                        <img src="{{ asset(recipe.user.getAvatarPath()) }}" alt="{{recipe.user.username }}" id="author_avatar"/>
+                    </a>
+		        </div>
+                <div class="col-md-4">
+                    Auteur.e <strong class="author_name text-primary h4">{{ recipe.user.username}}</strong>
+                    <div>
+                        Postée le <strong>{{recipe.createdAt() | date('d/m/Y')}}</strong>
+                    </div>
+                </div>
+                <div class="col">
+					Moyenne de <span id="js-likes-count">{{ recipe.likes | length }}</span> note{% if recipe.likes | length > 1 %}s{% endif %} :
+					<span id="js-likes-average">{{recipe.getAvgRating()}}</span>/5
+					<br/>
+					<span class="text-primary h1"> {{ recipe.getStars() | raw }}</span>
+					<span class="text-secondary" id="js-liked">
+						{% if app.user and recipe.isLikedByUser(app.user) %}
+							Votre note : {{ recipe.isLikedByUser(app.user) }}</span>
+						{% endif %}
+					</span>
+				</div> 
+            </div>
+        </footer>
+    </section>
+
+    <section class="commentaires">
+        {% include 'kuhnya/comments.html.twig' %}
+    </section>
+
+</div>
+{% endblock %}
+
+{% block javascripts %}
+	<script src="{{ asset('assets/js/setRating.js') }}"></script>
+    <script src="{{ asset('assets/js/modifyGuests.js') }}"></script>
+{% endblock %}

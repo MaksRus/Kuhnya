@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1 class="text-primary text-center">Gestion des Recettes</h1>
+
+    <table class="table my-5 table-dark">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Nom de la Recette</th>
+                <th>Auteur.e</th>
+                <th>Publiée le</th>
+                <th>Editer</th>
+                <th>Supprimer</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for recipe in recipes %}
+                <tr>
+                    <td>
+                        <a href="{{ path('kuhnya_show', {slug : recipe.slug}) }}">
+                            {% if recipe.images is empty %}
+                                <img src="{{ asset('uploads/recipesImg/notfound.jpg')}}" class="col-2 user_avatar" />
+                            {% else %}
+                                <img src="{{ asset(recipe.images[0].getPath()) }}" class="col-2 user_avatar" />
+                            {% endif %}
+                        </a>
+                    </td>
+                    <th>
+                        <a href="{{ path('kuhnya_show', {slug : recipe.slug}) }}">
+                            {{ recipe.title }}
+                        </a>
+                    </th>
+                    <td>{{ recipe.user.username }}</td>
+                    <td>{{ recipe.createdAt | date('d/m/Y') }}</td>
+                    <td>
+                        <a href="{{ path('recipe_edit', {id : recipe.id} ) }}">
+                            <i class="fas fa-marker btn btn-warning"></i>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{{ path('recipe_delete', {id : recipe.id} ) }}" class="js-confirm">
+                            <i class="far fa-trash-alt btn btn-danger"></i>
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="pagination justify-content-center">
+        {{ knp_pagination_render(recipes) }}
+    </div>
+    
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% form_theme form 'bootstrap_4_layout.html.twig' %}
+
+{% block stylesheets %}
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+{% endblock %}
+
+{% block body %}
+    <div class="container my-3">
+        <h2>S'inscrire</h2>
+        
+        {{ form_start(form) }}
+            {{ form_row(form.username) }}
+            {{ form_row(form.email) }}
+            {{ form_row(form.avatar) }}
+            {{ form_row(form.password) }}
+            {{ form_row(form.confirm_password) }}
+
+            <div class="g-recaptcha" data-sitekey="6Lc5SOoZAAAAAHMxNBa9YmdVJEPltxnKVNE3ik6E"></div>
+
+            <button class="btn btn-success">S'enregistrer</button>
+        {{ form_end(form) }}
+        
+    </div>
+    <script src="https://www.google.com/recaptcha/api.js?render=6LfpLuoZAAAAAGvGUWfzHqau-Eho35PZ7GnTVx6r"></script>
+{% endblock %}

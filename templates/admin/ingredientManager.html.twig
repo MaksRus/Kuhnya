@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1 class="text-primary text-center">Gestion des Ingrédients</h1>
+    <a href="{{ path('admin_ingredients_create') }}" class="btn btn-primary">Ajouter un Ingrédient</a>
+
+    <table class="table my-5 table-dark">
+        <thead>
+            <tr>
+                <th>Ingredient</th>
+                <th>Unité de mesure</th>
+                <th>Editer</th>
+                <th>Supprimer</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for ingredient in ingredients %}
+                <tr>
+                    <td>{{ ingredient.name }}</td>
+                    <th>{{ ingredient.unit }}</th>
+                    <td>
+                        <a href="{{ path('admin_ingredients_edit', {id : ingredient.id} ) }}">
+                            <i class="fas fa-marker btn btn-success"></i>
+                        </a> 
+                    </td>
+                    <td>
+                        <a href="{{ path('admin_ingredients_delete', {id : ingredient.id} ) }}" class="js-confirm">
+                            <i class="far fa-trash-alt btn btn-danger"></i>
+                        </a>
+                    </td>    
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="pagination justify-content-center">
+        {{ knp_pagination_render(ingredients) }}
+    </div>
+    
+{% endblock %}

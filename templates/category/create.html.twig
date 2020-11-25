@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% form_theme form 'bootstrap_4_layout.html.twig' %}
+
+{% block body %}
+	<div class="container">
+		{% if editMode %}
+			<h1 class="text-primary text-center">Modifier une Catégorie</h1>
+		{% else %}
+			<h1 class="text-primary text-center">Nouvelle Catégorie</h1>
+		{% endif %}
+		
+		{{ form_start (form) }}
+            {{form_row (form.title)}}
+            {{form_row (form.description)}}
+            <button class="btn btn-primary">Valider</button>
+        {{ form_end (form)}}
+	</div>
+{% endblock %}

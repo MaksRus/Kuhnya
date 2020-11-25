@@ -1,0 +1,62 @@
+{% block body %}
+
+<article class="card card-custom card-default col-2 mx-4 my-4">
+	<header class="card-header">
+		<h3>{{ recipe.title }}</h3>
+		{% for category in recipe.categories %}
+			<span class="badge badge-pill badge-primary">{{ category.title }}</span>
+		{% endfor %}
+	</header>
+	<section class="card-block">
+		<a href="{{ path ('kuhnya_show', {slug: recipe.slug}) }} ">
+			{% if recipe.images is empty %}
+				<img src="{{ asset('uploads/recipesImg/notfound.jpg')}}" class="intro_img img-fluid" alt="Aucune Image">
+			{% else %}
+				<img src="{{ asset(recipe.images[0].getPath()) }}" class="intro_img img-fluid" alt="{{ recipe.images[0].description}}">
+			{% endif %}
+		</a>
+	</section>
+	<foot class="card-footer row">
+		<div class="metadata">
+			<a href="{{ path('kuhnya_showByAuthor', {username : recipe.user.username}) }}">
+				<img src="{{ asset(recipe.user.getAvatarPath()) }}" alt="{{recipe.user.username }}" class="user_avatar col-3"/>
+			</a>
+		</div>
+		<div class="col">
+			Recette postée le
+			{{recipe.createdAt() | date('d/m/Y')}}
+			par
+			<strong class="author-name">{{recipe.user.username}}</strong>
+			{% if (app.user ==  recipe.user) or (is_granted('ROLE_ADMIN')) %}	
+				<a href="{{ path('recipe_edit', {id : recipe.id})}}"><i class="fas fa-marker btn btn-warning"></i></a>
+				<a href="{{ path('recipe_delete', {id : recipe.id} ) }}" class="js-confirm"><i class="far fa-trash-alt btn btn-danger"></i></a>
+			{% endif %}
+			<div class="row">
+				<div class="col">
+					Moyenne de <span id="js-likes-count">{{ recipe.likes | length }}</span> note{% if recipe.likes | length > 1 %}s{% endif %} :
+					<span id="js-likes-average">{{recipe.getAvgRating()}}</span>/5
+					<br/>
+					<span class="text-primary"> {{ recipe.getStars() | raw }}</span>
+					<span class="text-secondary" id="js-liked">
+						{% if app.user and recipe.isLikedByUser(app.user) %}
+							Votre note : {{ recipe.isLikedByUser(app.user) }}</span>
+						{% endif %}
+					</span>
+				</div>
+				<div class="col">
+					<div>
+						Niveau :
+						{{ recipe.level.name}}
+					</div>
+					<div>
+						Préparation :
+						{{ recipe.preptime.time}}
+						min
+					</div>
+				</div>
+
+			</div>
+	</foot>
+</article>
+
+{% endblock %}
