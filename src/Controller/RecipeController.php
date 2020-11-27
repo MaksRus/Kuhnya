@@ -52,8 +52,11 @@ class RecipeController extends AbstractController
                 $recipe->setCreatedAt(new \DateTime());
             }
 
-            $recipe->setSlug($slugger->slug($recipe->getTitle()))
-                ->setUser($user);
+            if(!$recipe->getUser()){
+                $recipe->setUser($user);
+            }
+
+            $recipe->setSlug($slugger->slug($recipe->getTitle()));
 
 
             $files = $recipeForm['images']->getData();
